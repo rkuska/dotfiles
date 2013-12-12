@@ -1,0 +1,9 @@
+[user]
+	name = Robert Kuska
+	email = rkuska@redhat.com
+[core]
+    whitespace = trailing-space,space-before-tab
+[apply]
+    whitespace = fix
+[push]
+	default = current

@@ -2,6 +2,7 @@ syntax enable
 filetype plugin indent on
 
 set relativenumber
+set number "this with comb ^ will show only current lineno
 set tw=99
 set bg=dark
 set nowrap
@@ -9,26 +10,29 @@ set fo-=t
 set colorcolumn=100
 set t_Co=256
 colorscheme lapis256
-
+set display+=lastline
 set encoding=utf8
 set ffs=unix,dos,mac
+set fdm=indent
+set nofoldenable
+set backspace=indent,eol,start
+
+set smarttab
+set hlsearch
 
 set expandtab
-set smarttab
-
 set shiftwidth=4
 set tabstop=4
 
-"set foldmethod=indent
+" Enable per project .vimrc file
+set exrc
+set secure
 
 set ai
 set si
 let mapleader = "\<Space>"
 " set paste to f2 (when inserting code)
 set pastetoggle=<F2>
-
-" Removes highlight of your last search
-
 
 " Force saving files that require root permission
 cmap w!! w %!sudo tee > /dev/null %
@@ -108,9 +112,6 @@ nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
-" jedi disable auto doc
-autocmd FileType python setlocal completeopt-=preview
-
 " speed up ctrl-p
 let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
 if executable('ag')
@@ -160,5 +161,26 @@ nmap <leader>w :bp <BAR> bd #<CR>
 nmap <leader>bl :ls<CR>
 
 noremap <leader>/ :nohl<CR>
-vnoremap <leader>/ :nohl<CR>
-inoremap <leader>/ :nohl<CR>
+
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
+
+nmap <Leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
+" some golang fixes for synstastic
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+" let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+
+" auto close getdoc window
+autocmd CompleteDone * pclose
+set omnifunc=syntaxcomplete#Complete
+
